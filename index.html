@@ -1,0 +1,129 @@
+<!-- Display the countdown timer in an element -->
+<head>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
+<script>
+    moment().format();
+</script>
+<script src="js/countdown.min.js"></script>
+<script src="js/moment-countdown.min.js"></script>
+<style>
+body {
+	background-color:#212121;
+} 
+img {
+	-moz-transform:scale(2);
+	-ms-transform:scale(2);
+	-o-transform:scale(2);
+	-webkit-transform:scale(2);
+	transform:scale(2);
+}
+.dragonback {
+	-webkit-transform: scale(-2, 2);
+	transform: scale(-2, 2);
+}
+.flamesofdisaster {
+	font-size:0;
+	animation: marquee 5s linear infinite;
+}
+@keyframes marquee {
+	0% {
+		transform: translateX(40%);
+	}
+	100% {
+		transform: translateX(-50%);
+	}
+}
+</style>
+<script>
+const start = () => {
+	setTimeout(function() {
+		confetti.start();
+	}, 0); // 1000 is time that after 1 second start the confetti ( 1000 = 1 sec)
+};
+const stop = () => {
+	setTimeout(function() {
+		confetti.stop();
+	}, 0); // 1000 is time that after 1 second start the confetti ( 1000 = 1 sec)
+};
+</script>
+</head>
+<body>
+
+<div style="margin:auto;width:100%;padding-top:10%;">
+<marquee scrollamount=20><img src="assets/webdragon.gif"></img></marquee>
+<p id="demo" style="text-align:center;color:white;font-size:128px;margin-top:10%;margin-bottom:0px;">LOADING</p>
+<div id="friday"><p id="fridayText" style="text-align:center;color:white;font-size:56px;margin-top:10px;margin-bottom:105px">...</p><script src="js/confetti.js"></script></div>
+<marquee scrollamount=20 direction=right><img class="dragonback" src="assets/webdragon.gif"></img></marquee>
+<div class="flamesofdisaster"><img style="padding:0px;" src="assets/fire.gif"></img></div>
+</div>
+<audio preload="auto" id="victory"><source src="assets/victory.mp3" type="audio/mpeg"></audio>
+<audio preload="auto" id="yippee"><source src="assets/yippee.mp3" type="audio/mpeg"></audio>
+
+<script>
+// Set the date we're counting down to
+var countDownDate = new Date("Feb 17, 2025 16:00:00");
+let countToggle = true;
+
+// Update the count down every 1 second
+var x = setInterval(function() {
+
+	// Get today's date and time
+	var now = new Date();
+	var nowDay = now.getDay();
+	minsUp = (5 - nowDay) * 510;
+	var newCountDate = moment(countDownDate).add(minsUp, 'm').toDate();
+
+	// Find the distance between now and the count down date
+	var distance = newCountDate.getTime() - now.getTime();
+
+	// Time calculations for days, hours, minutes and seconds
+	var hours = Math.floor((distance / (1000 * 60 * 60)));
+	var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+	var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+	if (countToggle) {
+		// Display the result in the element with id="demo"
+		document.getElementById("demo").innerHTML = hours + "h " + minutes + "m " + seconds + "s ";
+
+		// happy friday!
+		if (nowDay == 3) {
+		document.getElementById("fridayText").innerHTML = "work hours to EOW (What a week, huh?)";
+		} else if (nowDay == 5) {
+		document.getElementById("fridayText").innerHTML = "work hours to EOW (Happy Friday!)";
+		} else {
+		document.getElementById("fridayText").innerHTML = "work hours to EOW";
+		}
+	}
+
+	tempNow = moment(now)
+
+	if (tempNow.hours() == 16 && tempNow.minutes() == 0 && tempNow.seconds() == 0 && nowDay != 5) {
+		countToggle = false;
+		document.getElementById("demo").innerHTML = "...";
+		document.getElementById("fridayText").innerHTML = "(see you tomorrow!)";
+	} else if (tempNow.hours() == 16 && tempNow.minutes() == 0 && tempNow.seconds() == 0 && nowDay == 5) {
+		countToggle = false;
+		document.getElementById("demo").innerHTML = "GO HOME";
+		document.getElementById("fridayText").innerHTML = "(Happy Friday!)";
+	};
+	if (tempNow.hours() == 7 && tempNow.minutes() == 30 && tempNow.seconds() == 0) {
+		countToggle = true;
+		stop();
+		countDownDate.setDate(countDownDate.getDate() + 1);
+	};
+
+	if (hours == 1 && minutes == 0 && seconds == 0 && nowDay == 5 && tempNow.hours() >= 8) {
+		start();
+		document.getElementById('victory').play();
+		document.getElementById('yippee').play();
+	};
+
+	// If the count down is finished, write some text
+//	if (distance < 0 && nowDay == 5) {
+//		clearInterval(x);
+//		document.getElementById("demo").innerHTML = "GO HOME";
+//		document.getElementById("fridayText").innerHTML = "(Happy Friday!)";
+//	}
+}, 1000);
+</script>
+</body>
